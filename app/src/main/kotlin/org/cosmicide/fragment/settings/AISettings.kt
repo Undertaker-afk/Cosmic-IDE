@@ -9,18 +9,13 @@ package org.cosmicide.fragment.settings
 
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.seekBar
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.helpers.switch
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.cosmicide.R
-import org.cosmicide.ai.PollinationsProvider
 import org.cosmicide.util.PreferenceKeys
 
 class AISettings(private val activity: FragmentActivity) : SettingsProvider {
@@ -41,32 +36,17 @@ class AISettings(private val activity: FragmentActivity) : SettingsProvider {
                 activity.theme
             )
 
-            // Model selection - will be populated dynamically
-            val modelKeys = mutableListOf<SelectionItem>()
-            
-            // Fetch models asynchronously
-            activity.lifecycleScope.launch {
-                val models = withContext(Dispatchers.IO) {
-                    PollinationsProvider.fetchModels()
-                }
-                
-                modelKeys.clear()
-                models.forEach { model ->
-                    val description = if (model.requiresAuth) {
-                        "${model.name} (requires API key)"
-                    } else {
-                        "${model.name} (anonymous)"
-                    }
-                    modelKeys.add(SelectionItem(model.id, model.name, description))
-                }
-            }
+            // Model selection with static fallback
+            // Note: Dynamic model fetching from API is not supported by the preferences library
+            // Users will see a curated list of common models
+            val modelKeys = listOf(
+                SelectionItem("openai", "OpenAI", "Anonymous model"),
+                SelectionItem("mistral", "Mistral", "Anonymous model"),
+                SelectionItem("gpt-4", "GPT-4", "Requires API key"),
+                SelectionItem("gpt-3.5-turbo", "GPT-3.5 Turbo", "Requires API key")
+            )
 
-            singleChoice(PreferenceKeys.AI_MODEL, modelKeys.ifEmpty { 
-                listOf(
-                    SelectionItem("openai", "OpenAI", "Anonymous model"),
-                    SelectionItem("mistral", "Mistral", "Anonymous model")
-                )
-            }) {
+            singleChoice(PreferenceKeys.AI_MODEL, modelKeys) {
                 title = "AI Model"
                 summary = "Select the AI model to use. Anonymous models don't require an API key."
                 initialSelection = "openai"

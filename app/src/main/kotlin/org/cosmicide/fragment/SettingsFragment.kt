@@ -94,7 +94,7 @@ class SettingsFragment : BaseBindingFragment<FragmentSettingsBinding>() {
                 summary = "Configure Git integration"
                 gitSettings.provideSettings(this)
             }
-            geminiScreen = subScreen {
+            aiScreen = subScreen {
                 collapseIcon = true
                 title = "AI Assistant"
                 summary = "Configure AI chat and code completion"

@@ -143,8 +143,9 @@ class IdeEditor @JvmOverloads constructor(
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         // Accept copilot suggestion with Tab key
         if (keyCode == KeyEvent.KEYCODE_TAB && Prefs.copilotEnabled) {
-            inlineCopilot.acceptSuggestion()
-            return true
+            if (inlineCopilot.acceptSuggestion()) {
+                return true
+            }
         }
         return super.onKeyDown(keyCode, event)
     }

@@ -54,14 +54,17 @@ class InlineCopilot(private val editor: CodeEditor) {
 
     /**
      * Accept the current suggestion
+     * @return true if a suggestion was accepted, false otherwise
      */
-    fun acceptSuggestion() {
+    fun acceptSuggestion(): Boolean {
         currentSuggestion?.let { suggestion ->
             if (suggestion.isNotEmpty()) {
                 editor.commitText(suggestion)
                 clearSuggestion()
+                return true
             }
         }
+        return false
     }
 
     /**
