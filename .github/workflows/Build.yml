@@ -115,7 +115,7 @@ jobs:
           
           ### 🤖 AI Assistant Prompt
           
-          @coderabbitai Please analyze the workflow failure at ${WORKFLOW_URL} and help diagnose the build issue.
+          @coderabbitai @cto @copilot Please analyze the workflow failure at ${WORKFLOW_URL} and help diagnose the build issue.
           
           **Context for AI analysis:**
           1. Review the workflow logs to identify the failing step
