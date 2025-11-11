@@ -18,7 +18,6 @@ import de.Maxr1998.modernpreferences.PreferencesAdapter
 import de.Maxr1998.modernpreferences.helpers.screen
 import de.Maxr1998.modernpreferences.helpers.subScreen
 import org.cosmicide.MainActivity
-import org.cosmicide.chat.ChatProvider
 import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.databinding.FragmentSettingsBinding
 import org.cosmicide.fragment.settings.AboutSettings
@@ -26,7 +25,7 @@ import org.cosmicide.fragment.settings.AppearanceSettings
 import org.cosmicide.fragment.settings.CompilerSettings
 import org.cosmicide.fragment.settings.EditorSettings
 import org.cosmicide.fragment.settings.FormatterSettings
-import org.cosmicide.fragment.settings.GeminiSettings
+import org.cosmicide.fragment.settings.AISettings
 import org.cosmicide.fragment.settings.GitSettings
 import org.cosmicide.fragment.settings.PluginSettingsProvider
 
@@ -54,9 +53,9 @@ class SettingsFragment : BaseBindingFragment<FragmentSettingsBinding>() {
         val pluginsSettings = PluginSettingsProvider(requireActivity())
         val gitSettings = GitSettings(requireActivity())
         val aboutSettings = AboutSettings(requireActivity())
-        val geminiSettings = GeminiSettings(requireActivity())
+        val aiSettings = AISettings(requireActivity())
 
-        var geminiScreen: PreferenceScreen? = null
+        var aiScreen: PreferenceScreen? = null
 
         val screen = screen(requireContext()) {
             subScreen {
@@ -95,11 +94,11 @@ class SettingsFragment : BaseBindingFragment<FragmentSettingsBinding>() {
                 summary = "Configure Git integration"
                 gitSettings.provideSettings(this)
             }
-            geminiScreen = subScreen {
+            aiScreen = subScreen {
                 collapseIcon = true
-                title = "Gemini"
-                summary = "Configure Gemini integration"
-                geminiSettings.provideSettings(this)
+                title = "AI Assistant"
+                summary = "Configure AI chat and code completion"
+                aiSettings.provideSettings(this)
             }
             subScreen {
                 collapseIcon = true
@@ -122,9 +121,6 @@ class SettingsFragment : BaseBindingFragment<FragmentSettingsBinding>() {
 
         binding.preferencesView.adapter = preferencesAdapter
         binding.toolbar.setNavigationOnClickListener {
-            if (preferencesAdapter.currentScreen == geminiScreen) {
-                ChatProvider.regenerateModel()
-            }
             if (!preferencesAdapter.goBack()) {
                 parentFragmentManager.popBackStack()
             }
@@ -135,9 +131,6 @@ class SettingsFragment : BaseBindingFragment<FragmentSettingsBinding>() {
                 override fun handleOnBackPressed() {
                     if (isResumed.not()) {
                         return
-                    }
-                    if (preferencesAdapter.currentScreen == geminiScreen) {
-                        ChatProvider.regenerateModel()
                     }
                     if (!preferencesAdapter.goBack()) {
                         isEnabled = false

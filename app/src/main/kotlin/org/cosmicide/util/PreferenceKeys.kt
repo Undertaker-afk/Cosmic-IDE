@@ -55,12 +55,14 @@ object PreferenceKeys {
     const val PLUGIN_REPOSITORY = "plugin_repository"
     const val PLUGIN_SETTINGS = "plugin_settings"
 
-    // Gemini Pro
-    const val GEMINI_API_KEY = "gemini_api_key"
-    const val GEMINI_MODEL = "gemini_model"
+    // AI (Pollinations)
+    const val AI_API_KEY = "ai_api_key"
+    const val AI_MODEL = "ai_model"
     const val TEMPERATURE = "temperature"
     const val TOP_P = "top_p"
     const val TOP_K = "top_k"
     const val CANDIDATE_COUNT = "candidate_count"
     const val MAX_TOKENS = "max_tokens"
+    const val COPILOT_ENABLED = "copilot_enabled"
+    const val COPILOT_DELAY = "copilot_delay"
 }

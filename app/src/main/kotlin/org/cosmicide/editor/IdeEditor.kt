@@ -10,9 +10,15 @@ package org.cosmicide.editor
 import android.content.Context
 import android.content.res.Configuration
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import com.google.android.material.color.MaterialColors
 import com.google.common.collect.ImmutableSet
+import io.github.rosemoe.sora.event.ContentChangeEvent
+import io.github.rosemoe.sora.event.EventReceiver
+import io.github.rosemoe.sora.event.PublishSearchResultEvent
+import io.github.rosemoe.sora.event.SelectionChangeEvent
+import io.github.rosemoe.sora.event.Unsubscribe
 import io.github.rosemoe.sora.langs.textmate.TextMateColorScheme
 import io.github.rosemoe.sora.langs.textmate.registry.ThemeRegistry
 import io.github.rosemoe.sora.widget.CodeEditor
@@ -33,6 +39,8 @@ class IdeEditor @JvmOverloads constructor(
         ')', ']', '}', '"', '>', '\'', ';'
     )
 
+    val inlineCopilot = InlineCopilot(this)
+
     init {
         colorScheme = TextMateColorScheme.create(ThemeRegistry.getInstance())
         setCompletionLayout()
@@ -50,6 +58,13 @@ class IdeEditor @JvmOverloads constructor(
         isLineNumberEnabled = Prefs.lineNumbers
         props.deleteEmptyLineFast = Prefs.quickDelete
         props.stickyScroll = Prefs.stickyScroll
+        
+        // Subscribe to text changes for inline copilot
+        subscribeEvent(ContentChangeEvent::class.java) { event, _ ->
+            if (Prefs.copilotEnabled) {
+                inlineCopilot.requestCompletion()
+            }
+        }
     }
 
     override fun commitText(text: CharSequence?, applyAutoIndent: Boolean) {
@@ -118,5 +133,20 @@ class IdeEditor @JvmOverloads constructor(
         if (editorLanguage is TsLanguageJava) {
             (editorLanguage as TsLanguageJava).onConfigurationChanged()
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        inlineCopilot.release()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        // Accept copilot suggestion with Tab key
+        if (keyCode == KeyEvent.KEYCODE_TAB && Prefs.copilotEnabled) {
+            if (inlineCopilot.acceptSuggestion()) {
+                return true
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }
