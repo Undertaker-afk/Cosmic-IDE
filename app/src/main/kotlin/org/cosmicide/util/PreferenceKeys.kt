@@ -65,4 +65,11 @@ object PreferenceKeys {
     const val MAX_TOKENS = "max_tokens"
     const val COPILOT_ENABLED = "copilot_enabled"
     const val COPILOT_DELAY = "copilot_delay"
+    
+    // MCP (Model Context Protocol)
+    const val MCP_ENABLED = "mcp_enabled"
+    const val MCP_TOOLS_ENABLED = "mcp_tools_enabled"
+    const val MCP_EXA_ENABLED = "mcp_exa_enabled"
+    const val MCP_GREP_ENABLED = "mcp_grep_enabled"
+    const val MCP_DEEPWIKI_ENABLED = "mcp_deepwiki_enabled"
 }
