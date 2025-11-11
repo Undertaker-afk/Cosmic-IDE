@@ -144,6 +144,12 @@ object Prefs {
     val aiModel: String
         get() = prefs.getString("ai_model", "openai") ?: "openai"
 
+    var cachedModels: String
+        get() = prefs.getString("cached_models", "") ?: ""
+        set(value) {
+            prefs.edit().putString("cached_models", value).apply()
+        }
+
     val temperature: Float
         get() = runCatching {
             prefs.getString("temperature", "0.9")?.toFloatOrNull()?.coerceIn(0f, 1f) ?: 0.9f
