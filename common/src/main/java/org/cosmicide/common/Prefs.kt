@@ -137,11 +137,12 @@ object Prefs {
             prefs.getString("font_size", "14")?.toFloatOrNull()?.coerceIn(1f, 32f) ?: 14f
         }.getOrElse { 16f }
 
-    val geminiApiKey: String
-        get() = prefs.getString("gemini_api_key", "") ?: ""
+    // Pollinations AI preferences
+    val aiApiKey: String
+        get() = prefs.getString("ai_api_key", "") ?: ""
 
-    val geminiModel: String
-        get() = prefs.getString("gemini_model", "gemini-2.0-flash") ?: "gemini-2.0-flash"
+    val aiModel: String
+        get() = prefs.getString("ai_model", "openai") ?: "openai"
 
     val temperature: Float
         get() = runCatching {
@@ -158,6 +159,12 @@ object Prefs {
 
     val maxTokens: Int
         get() = prefs.getInt("max_tokens", 1024).coerceIn(60, 2048)
+
+    val copilotEnabled: Boolean
+        get() = prefs.getBoolean("copilot_enabled", true)
+
+    val copilotDelay: Int
+        get() = prefs.getInt("copilot_delay", 500).coerceIn(100, 5000)
 
     val clientName: String
         get() = prefs.getString("client_name", null)?.replace(" ", "") ?: Build.ID

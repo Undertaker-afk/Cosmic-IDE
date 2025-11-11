@@ -23,13 +23,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
-import com.google.genai.errors.ServerException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.cosmicide.R
 import org.cosmicide.adapter.ConversationAdapter
-import org.cosmicide.chat.ChatProvider
+import org.cosmicide.ai.PollinationsProvider
 import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.databinding.FragmentChatBinding
 import org.cosmicide.extension.getDip
@@ -51,7 +50,7 @@ class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
 
     private fun setupUI(context: Context) {
         initToolbar()
-        binding.toolbar.title = "Gemini Pro"
+        binding.toolbar.title = "AI Chat"
     }
 
     private fun initToolbar() {
@@ -81,17 +80,18 @@ class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
             binding.messageText.setText("")
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    val reply = ChatProvider.generate(
+                    val reply = PollinationsProvider.generate(
                         conversationAdapter.getConversations()
                     )
 
-                    val response = ConversationAdapter.Conversation(stream = reply)
                     withContext(Dispatchers.Main) {
-                        conversationAdapter.add(response)
+                        conversationAdapter.add(ConversationAdapter.Conversation(reply, "assistant"))
                         binding.recyclerview.scrollToPosition(conversationAdapter.itemCount - 1)
                     }
-                } catch (e: ServerException) {
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
