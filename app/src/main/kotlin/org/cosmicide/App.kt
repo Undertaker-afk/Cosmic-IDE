@@ -34,6 +34,7 @@ import org.cosmicide.rewrite.plugin.api.HookManager
 import org.cosmicide.rewrite.plugin.api.PluginLoader
 import org.cosmicide.rewrite.util.FileUtil
 import org.cosmicide.util.CommonUtils
+import org.cosmicide.mcp.McpProvider
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.sui.Sui
 import java.io.File
@@ -135,6 +136,9 @@ class App : Application() {
         })
 
         Analytics.setAnalyticsCollectionEnabled(Prefs.analyticsEnabled)
+        
+        // Initialize MCP with default project path
+        McpProvider.initialize(this)
     }
 
     fun getTheme(theme: String): Int {

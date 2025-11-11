@@ -32,15 +32,22 @@ import org.cosmicide.ai.PollinationsProvider
 import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.databinding.FragmentChatBinding
 import org.cosmicide.extension.getDip
+import org.cosmicide.chat.EnhancedChatProvider
+import org.cosmicide.mcp.McpProvider
 
 class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
 
     private val conversationAdapter = ConversationAdapter()
+    private var currentFilePath: String? = null
 
     override fun getViewBinding() = FragmentChatBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        // Get current file path from arguments if available
+        currentFilePath = arguments?.getString("currentFilePath")
+        
         setupUI(view.context)
         setOnClickListeners()
         setupRecyclerView()
@@ -80,8 +87,10 @@ class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
             binding.messageText.setText("")
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    val reply = PollinationsProvider.generate(
-                        conversationAdapter.getConversations()
+                    // Use EnhancedChatProvider with MCP support
+                    val reply = EnhancedChatProvider.generate(
+                        conversationAdapter.getConversations(),
+                        currentFilePath = currentFilePath
                     )
 
                     withContext(Dispatchers.Main) {

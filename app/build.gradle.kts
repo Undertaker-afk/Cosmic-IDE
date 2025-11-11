@@ -223,6 +223,7 @@ dependencies {
     implementation(projects.feature.project)
     implementation(projects.feature.codeNavigation)
     implementation(projects.feature.genai)
+    implementation(projects.feature.mcp)
     implementation(projects.util)
     implementation(projects.jgit)
     implementation(projects.feature.treeView)

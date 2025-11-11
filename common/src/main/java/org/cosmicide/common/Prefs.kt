@@ -172,6 +172,28 @@ object Prefs {
     val copilotDelay: Int
         get() = prefs.getInt("copilot_delay", 500).coerceIn(100, 5000)
 
+    // MCP preferences
+    val mcpEnabled: Boolean
+        get() = prefs.getBoolean("mcp_enabled", true)
+    
+    val mcpToolsEnabled: Boolean
+        get() = prefs.getBoolean("mcp_tools_enabled", true)
+    
+    val mcpExaEnabled: Boolean
+        get() = prefs.getBoolean("mcp_exa_enabled", true)
+    
+    val mcpGrepEnabled: Boolean
+        get() = prefs.getBoolean("mcp_grep_enabled", true)
+    
+    val mcpDeepWikiEnabled: Boolean
+        get() = prefs.getBoolean("mcp_deepwiki_enabled", true)
+
+    val geminiApiKey: String
+        get() = prefs.getString("gemini_api_key", "") ?: ""
+    
+    val geminiModel: String
+        get() = prefs.getString("gemini_model", "gemini-2.0-flash") ?: "gemini-2.0-flash"
+
     val clientName: String
         get() = prefs.getString("client_name", null)?.replace(" ", "") ?: Build.ID
 }

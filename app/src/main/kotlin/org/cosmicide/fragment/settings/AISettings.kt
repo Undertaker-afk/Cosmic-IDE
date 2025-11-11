@@ -196,6 +196,46 @@ class AISettings(private val activity: FragmentActivity) : SettingsProvider {
                 default = 1024
                 iconSpaceReserved = false
             }
+            
+            // MCP Settings Section
+            switch(PreferenceKeys.MCP_ENABLED) {
+                title = "Enable MCP Context"
+                summary = "Use Model Context Protocol to provide codebase context to AI"
+                defaultValue = true
+                iconSpaceReserved = false
+            }
+            
+            switch(PreferenceKeys.MCP_TOOLS_ENABLED) {
+                title = "Enable MCP Tools"
+                summary = "Allow AI to execute tools (file operations, search, etc.)"
+                defaultValue = true
+                iconSpaceReserved = false
+                dependency = PreferenceKeys.MCP_ENABLED
+            }
+            
+            switch(PreferenceKeys.MCP_EXA_ENABLED) {
+                title = "Enable Exa AI Search"
+                summary = "Web search and research capabilities via mcp.exa.ai"
+                defaultValue = true
+                iconSpaceReserved = false
+                dependency = PreferenceKeys.MCP_TOOLS_ENABLED
+            }
+            
+            switch(PreferenceKeys.MCP_GREP_ENABLED) {
+                title = "Enable Grep.app Code Search"
+                summary = "GitHub code search capabilities via mcp.grep.app"
+                defaultValue = true
+                iconSpaceReserved = false
+                dependency = PreferenceKeys.MCP_TOOLS_ENABLED
+            }
+            
+            switch(PreferenceKeys.MCP_DEEPWIKI_ENABLED) {
+                title = "Enable DeepWiki Knowledge Base"
+                summary = "Documentation and knowledge search via mcp.deepwiki.com"
+                defaultValue = true
+                iconSpaceReserved = false
+                dependency = PreferenceKeys.MCP_TOOLS_ENABLED
+            }
         }
     }
 
